@@ -1,4 +1,4 @@
-import { DataType, DataTypes, Model } from "sequelize";
+import { DataType, DataTypes, Model, Optional } from "sequelize";
 import sequelize from "./index";
 import { Post } from "./Post";
 
@@ -13,7 +13,13 @@ export interface UserAttributes {
   deletedAt?: Date;
 }
 
-export class User extends Model<UserAttributes> implements UserAttributes {
+export interface UserInputs
+  extends Optional<UserAttributes, "id" | "isVerified"> {}
+
+export class User
+  extends Model<UserAttributes, UserInputs>
+  implements UserAttributes
+{
   public id!: number;
   public name!: string;
   public email!: string;

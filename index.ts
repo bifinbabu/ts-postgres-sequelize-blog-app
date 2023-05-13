@@ -3,6 +3,10 @@ import sequelize from "./models";
 import { AuthRoutes } from "./routes/auth.routes";
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 const port = process.env.PORT || 8000;
 
 const routes = [new AuthRoutes()];
