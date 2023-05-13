@@ -5,7 +5,11 @@ import { AuthRoutes } from "./routes/auth.routes";
 const app = express();
 const port = process.env.PORT || 8000;
 
-app.use("/api", new AuthRoutes().router);
+const routes = [new AuthRoutes()];
+
+routes.forEach((route) => app.use("/api", route.router));
+
+// app.use("/api", new AuthRoutes().router);
 
 sequelize.authenticate().then(async () => {
   await sequelize.sync();
