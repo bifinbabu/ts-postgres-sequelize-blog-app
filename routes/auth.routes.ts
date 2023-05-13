@@ -1,6 +1,8 @@
 import { Router } from "express";
 import RouteInterface from "../interfaces/routes.interface";
 import AuthController from "../controllers/auth.controller";
+import validationMiddleware from "../middlewares/validation.middleware";
+import { SignupDTO } from "../dtos/auth.dto";
 
 export class AuthRoutes implements RouteInterface {
   public router = Router();
@@ -13,6 +15,10 @@ export class AuthRoutes implements RouteInterface {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/signup`, this.authController.signup);
+    this.router.post(
+      `${this.path}/signup`,
+      validationMiddleware(SignupDTO, "body"),
+      this.authController.signup
+    );
   }
 }
