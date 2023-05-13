@@ -11,3 +11,12 @@ export class SignupDTO {
   @Length(8)
   password: string;
 }
+
+export class LoginDTO {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @Length(8)
+  password: string;
+}
