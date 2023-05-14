@@ -3,9 +3,10 @@ import {
   LoginResponseInterface,
   UserInterface,
 } from "../interfaces/auth.interface";
-import { User, UserAttributes } from "../models/User";
+import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import sendMail from "../utils/sendEmail";
 
 export class AuthService {
   public async signup(data: SignupDTO): Promise<UserInterface> {
@@ -27,6 +28,13 @@ export class AuthService {
       email: newUser.email,
       isVerified: newUser.isVerified,
     };
+
+    const token = await jwt.sign(result, process.env.JWT_SECRET as string, {
+      expiresIn: 86400,
+    });
+
+    sendMail(newUser.email, newUser.name, token);
+
     return result;
   }
   public async login(data: LoginDTO): Promise<LoginResponseInterface> {
