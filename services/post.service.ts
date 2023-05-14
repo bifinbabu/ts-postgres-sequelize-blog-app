@@ -51,4 +51,18 @@ export class PostService {
     // return post;
     return updatedPost[1][0];
   }
+
+  public async deletePost(id: number, user: number): Promise<void> {
+    const post = await Post.findOne({ where: { id } });
+    if (!post) {
+      throw { status: 404, message: "Post not found" };
+    }
+    if (post.userId !== user) {
+      throw {
+        status: 403,
+        message: "You don't have permission to delete this post",
+      };
+    }
+    await Post.destroy({ where: { id } });
+  }
 }

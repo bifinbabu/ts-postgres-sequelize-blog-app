@@ -41,5 +41,11 @@ export class PostRoutes implements RouteInterface {
       validationMiddleware(CreatePostDTO, "body"),
       this.postController.updatePost
     );
+
+    this.router.delete(
+      `${this.path}/:id`,
+      authMiddleware,
+      this.postController.deletePost
+    );
   }
 }

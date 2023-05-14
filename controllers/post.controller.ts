@@ -70,6 +70,25 @@ class PostController {
         .json({ message: error.message ?? "Something went wrong" });
     }
   };
+
+  public deletePost = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const updateData = req.body as CreatePostDTO;
+      await this.postService.deletePost(
+        req.params.id as unknown as number,
+        req.user.id
+      );
+      res.status(201).json({ message: "Post deleted successfully" });
+    } catch (error: any) {
+      res
+        .status(error.status ?? 500)
+        .json({ message: error.message ?? "Something went wrong" });
+    }
+  };
 }
 
 export default PostController;
