@@ -1,4 +1,4 @@
-import { DataType, DataTypes, Model, Optional } from "sequelize";
+import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "./index";
 import { Post } from "./Post";
 
@@ -63,5 +63,5 @@ User.init(
   }
 );
 
-User.hasMany(Post);
+User.hasMany(Post, { foreignKey: "userId" });
 Post.belongsTo(User, { foreignKey: "userId" });
