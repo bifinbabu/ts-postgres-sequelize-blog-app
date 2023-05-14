@@ -28,4 +28,27 @@ export class PostService {
       ],
     });
   }
+
+  public async updatePost(
+    id: string,
+    data: CreatePostDTO,
+    user: number
+  ): Promise<PostAttributes> {
+    const post = await Post.findOne({ where: { id } });
+    if (!post) {
+      throw { status: 404, message: "Post not found" };
+    }
+    if (post.userId !== user) {
+      throw {
+        status: 403,
+        message: "You don't have permission to update this post",
+      };
+    }
+    const updatedPost = await Post.update(data, {
+      where: { id },
+      returning: true,
+    });
+    // return post;
+    return updatedPost[1][0];
+  }
 }

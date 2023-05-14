@@ -34,5 +34,12 @@ export class PostRoutes implements RouteInterface {
       authMiddleware,
       this.postController.fetchPostById
     );
+
+    this.router.put(
+      `${this.path}/:id`,
+      authMiddleware,
+      validationMiddleware(CreatePostDTO, "body"),
+      this.postController.updatePost
+    );
   }
 }

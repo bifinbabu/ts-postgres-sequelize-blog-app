@@ -50,6 +50,26 @@ class PostController {
         .json({ message: error.message ?? "Something went wrong" });
     }
   };
+
+  public updatePost = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const updateData = req.body as CreatePostDTO;
+      const data = await this.postService.updatePost(
+        req.params.id,
+        updateData,
+        req.user.id
+      );
+      res.status(201).json({ message: "Post updated successfully", data });
+    } catch (error: any) {
+      res
+        .status(error.status ?? 500)
+        .json({ message: error.message ?? "Something went wrong" });
+    }
+  };
 }
 
 export default PostController;
