@@ -35,6 +35,21 @@ class PostController {
         .json({ message: error.message ?? "Something went wrong" });
     }
   };
+
+  public fetchPostById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = await this.postService.fetchPostById(req.params.id);
+      res.status(201).json({ message: "Post fetched successfully", data });
+    } catch (error: any) {
+      res
+        .status(error.status ?? 500)
+        .json({ message: error.message ?? "Something went wrong" });
+    }
+  };
 }
 
 export default PostController;

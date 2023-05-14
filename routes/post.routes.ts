@@ -22,10 +22,17 @@ export class PostRoutes implements RouteInterface {
       validationMiddleware(CreatePostDTO, "body"),
       this.postController.createPost
     );
+
     this.router.get(
       `${this.path}`,
       authMiddleware,
       this.postController.fetchPosts
+    );
+
+    this.router.get(
+      `${this.path}/:id`,
+      authMiddleware,
+      this.postController.fetchPostById
     );
   }
 }
