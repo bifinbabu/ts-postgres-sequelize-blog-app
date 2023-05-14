@@ -37,6 +37,7 @@ export class AuthService {
 
     return result;
   }
+
   public async login(data: LoginDTO): Promise<LoginResponseInterface> {
     const user = await User.findOne({ where: { email: data.email } });
     if (!user) {
@@ -59,5 +60,34 @@ export class AuthService {
     });
 
     return { user: payload, token: `Bearer ${token}` };
+  }
+
+  public async verifyEmail(token: string): Promise<LoginResponseInterface> {
+    const response = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as UserInterface;
+
+    const user = await User.update(
+      { isVerified: true },
+      { where: { id: response.id }, returning: true }
+    );
+
+    const payload = {
+      id: user[1][0].id,
+      name: user[1][0].name,
+      email: user[1][0].email,
+      isVerified: user[1][0].isVerified,
+    };
+
+    const authToken = await jwt.sign(
+      payload,
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: 86400,
+      }
+    );
+
+    return { user: payload, token: `Bearer ${authToken}` };
   }
 }

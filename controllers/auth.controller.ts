@@ -4,6 +4,7 @@ import { AuthService } from "../services/auth.service";
 
 class AuthController {
   public authService = new AuthService();
+
   public signup = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData: SignupDTO = req.body;
@@ -15,11 +16,27 @@ class AuthController {
         .json({ message: error.message ?? "Something went wrong" });
     }
   };
+
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData: LoginDTO = req.body;
       const data = await this.authService.login(userData);
       res.status(201).json({ message: "User logged in", data });
+    } catch (error: any) {
+      res
+        .status(error.status ?? 500)
+        .json({ message: error.message ?? "Something went wrong" });
+    }
+  };
+
+  public verifyEmail = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = await this.authService.verifyEmail(req.params.token);
+      res.status(201).json({ message: "User verified successfully", data });
     } catch (error: any) {
       res
         .status(error.status ?? 500)
