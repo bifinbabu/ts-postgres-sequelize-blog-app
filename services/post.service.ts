@@ -12,4 +12,10 @@ export class PostService {
       userId,
     });
   }
+
+  public async fetchPosts(): Promise<PostAttributes[]> {
+    return await Post.findAll({
+      attributes: ["id", "title", "userId", "description"],
+    });
+  }
 }
